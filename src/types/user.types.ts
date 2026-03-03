@@ -3,3 +3,8 @@ export interface UserDto {
   username: string
   lists: []
 }
+
+export interface SimpleUser {
+  id: number
+  username: string
+}

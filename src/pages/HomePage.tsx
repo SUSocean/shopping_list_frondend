@@ -36,8 +36,10 @@ import { toast } from "sonner"
 import { userCreateList } from "@/api/userCreateList";
 import type { SimpleList } from "@/types/list.types";
 import { Field, FieldGroup } from "@/components/ui/field"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons'
+import {
+  TrashIcon,
+  UserRoundIcon
+} from "lucide-react"
 
 function HomePage() {
 
@@ -90,7 +92,7 @@ function HomePage() {
             <CardContent>{list.name}</CardContent>
             <CardAction className="self-end">
               <Button onClick={e => handleDeleteList(e, list.id)} variant="ghost">
-                <FontAwesomeIcon icon={faTrashCan} />
+                <TrashIcon/>
               </Button>
             </CardAction>
           </Card>
@@ -99,7 +101,12 @@ function HomePage() {
       }
       
     }else{
-      return (<div>error</div>)
+      return(
+        <>
+        <div></div>
+        <div className="flex justify-center"><Spinner/></div>
+        </>
+      )
     }
   }
 
@@ -134,11 +141,11 @@ function HomePage() {
     <>
     {loading && <Spinner className="size-8"/>}
     {!loading &&
-      <div className="w-full h-screen">
+      <div className="w-full h-screen p-5">
         <div className="mb-8 flex justify-between">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">{user?.username}</Button>
+              <Button variant="outline">{user?.username}<UserRoundIcon/></Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuGroup>

@@ -11,7 +11,7 @@ function App() {
   return (
     
     <div className='min-h-screen flex items-center justify-center bg-background'>
-    <div className='w-full max-w-2xl m-5'>
+    <div className='w-full max-w-2xl'>
       <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />} />
