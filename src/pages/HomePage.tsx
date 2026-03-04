@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { checkAuth } from "../api/authCheck"
 import { authLogout } from "../api/authLogout"
+import { userDelete } from "@/api/userDelete"
 import {userDeleteList} from "../api/userDeleteList"
 import { Link, useNavigate } from "react-router"
 import { getMe } from "../api/getMe"
@@ -31,6 +32,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogMedia,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 import { userCreateList } from "@/api/userCreateList";
@@ -51,7 +64,6 @@ function HomePage() {
   async function loadUser(){
     const foundUser = await getMe()
     setUser(foundUser)
-    console.log(foundUser)
   }
 
   useEffect(()=>{
@@ -67,7 +79,6 @@ function HomePage() {
         loadUser()
         setLoading(false)
       } catch(err){
-        console.log(err)
         navigate("/login")
       }
     }
@@ -116,7 +127,6 @@ function HomePage() {
         await userCreateList(name)
         await loadUser()
       } catch(error){
-          console.log(error)
           toast.error("List creation faild", {position: "top-center"})
       }
   }
@@ -127,7 +137,6 @@ function HomePage() {
         await userDeleteList(id)
         await loadUser()
       } catch(error){
-          console.log(error)
           toast.error("List deletion faild", {position: "top-center"})
       }
   }
@@ -135,6 +144,15 @@ function HomePage() {
   async function handleLogout(){
     await authLogout();
     navigate("/login")
+  }
+
+  async function handleDelete(){
+    try{
+      await userDelete()
+      navigate("/register")
+    }catch(err){
+      toast("something went wrong", {position: "top-center"})
+    }
   }
 
   return (
@@ -152,7 +170,26 @@ function HomePage() {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+                <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive">Delete user</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent size="sm">
+                  <AlertDialogHeader>
+                    <AlertDialogMedia className="bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive">
+                      <TrashIcon />
+                    </AlertDialogMedia>
+                    <AlertDialogTitle>Delete user?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will permanently delete your account.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleDelete} variant="destructive">Delete</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -39,7 +39,6 @@ function RegisterPage() {
             await authRegister(username, password)
             navigate("/login")
         } catch(error){
-            console.log(error)
             toast.error("Register failed | Username might be taken", {position: "top-center"})
         } finally{
             setLoading(false)

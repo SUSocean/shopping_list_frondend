@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import axios from "axios";
 import { listDeleteItem } from "@/api/lsitDeleteItem"
 import { listEditItemName } from "@/api/listEditItemName"
+import { listReorder } from "@/api/listReorder"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -59,7 +60,8 @@ import {
   UsersRoundIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  CrownIcon
+  CrownIcon,
+  ArrowUpDownIcon
 } from "lucide-react"
 
 import { Field, FieldGroup } from "@/components/ui/field"
@@ -78,12 +80,14 @@ function ListPage() {
     const [addUsername, setAddUsername] = useState("")
     const [isOpen, setIsOpen] = useState(false)
     const [user, setUser] = useState<UserDto>()
+    const [swapItem, setSwapItem] = useState<ItemDto>()
+    const [isSwapSet, setIsSwapSet] = useState(false)
     const navigate = useNavigate()
 
     async function loadList(){
         const list = await listGet(path)
           setList(list)
-          console.log(list)
+          setIsSwapSet(false)
       }
     async function loadUser(){
         const foundUser = await getMe()
@@ -99,7 +103,6 @@ function ListPage() {
           loadUser()
           setLoading(false)
         } catch(err){
-          console.log(err)
           navigate("/login")
         }
       }
@@ -127,6 +130,22 @@ function ListPage() {
             <ItemActions className="h-full">
               <Button onClick={() => handleItemDeletion(item.id)} size="sm" variant="ghost">
                 <TrashIcon/>
+              </Button>
+              <Button 
+              variant={(isSwapSet && swapItem?.id === item.id) ? "secondary" : "ghost"}
+              onClick={() =>{
+                if(isSwapSet && swapItem){
+                  if(swapItem.id === item.id){
+                    setIsSwapSet(false)
+                  }else{
+                    handleReorder(swapItem, item)
+                  }
+                }else{
+                  setSwapItem(item)
+                  setIsSwapSet(true)
+                }
+              }} size="sm">
+                <ArrowUpDownIcon/>
               </Button>
               <Dialog>
                 <DialogTrigger asChild>
@@ -359,6 +378,18 @@ function ListPage() {
         if(list){
           await listAddUser(list.id, username)
           setAddUsername("")
+          loadList()
+        }
+      }catch(err){
+        toast("something went wrong", {position: "top-center"})
+      }
+    }
+
+    async function handleReorder(firstItem: ItemDto, secondItem: ItemDto){
+      try{
+        if(list){
+          await listReorder(list, firstItem.position, secondItem.position)
+          setIsSwapSet(false)
           loadList()
         }
       }catch(err){

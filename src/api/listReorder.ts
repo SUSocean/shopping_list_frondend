@@ -1,10 +1,14 @@
-import { Q } from "node_modules/react-router/dist/development/index-react-server-client-MKTlCGL3.d.mts";
 import api from "./axios";
-import type { ItemDto } from "@/types/item.types";
+import type { OpenedList } from "@/types/list.types";
 
-export async function listReorder(list: OpenedList, firstItem: ItemDto, secondItem: ItemDto) {
+export async function listReorder(list: OpenedList, firstItemPos: number, secondItemPos: number) {
+    [list.items[firstItemPos], list.items[secondItemPos]] = [list.items[secondItemPos], list.items[firstItemPos]]
+    const itemsOrder = []
+    
+    for(let i = 0; i < list.items.length; i++){
+        itemsOrder.push(list.items[i].id)
+    }
 
-
-    // const response = await api.patch<ItemDto>("/lists/" + listId + "/item/" + item.id + "/edit", item);
+    const response = await api.patch("/lists/" + list.id + "/reorder" , {itemsOrder});
     return response.data;
 }
