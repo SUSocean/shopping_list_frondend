@@ -76,7 +76,9 @@ function HomePage() {
           return
         }
 
-        loadUser()
+        const foundUser = await getMe()
+        console.log(foundUser)
+        setUser(foundUser)
         setLoading(false)
       } catch(err){
         navigate("/login")
@@ -87,8 +89,8 @@ function HomePage() {
   }, [])
 
   function generageLists(){
-    if(user){
-      if(user.lists.length < 1){
+    if(user && user.lists){
+      if(user.lists?.length < 1){
         return(
           <>
           <p></p>
