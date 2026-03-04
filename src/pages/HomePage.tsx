@@ -77,7 +77,6 @@ function HomePage() {
         }
 
         const foundUser = await getMe()
-        console.log(foundUser)
         setUser(foundUser)
         setLoading(false)
       } catch(err){
