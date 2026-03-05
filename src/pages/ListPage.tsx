@@ -400,12 +400,12 @@ function ListPage() {
     return (
       <>
 
-      <div className="w-full h-screen relative p-5">
+      <div className="w-full h-[100dvh] flex flex-col">
         
       {loading && <div className="flex justify-center items-center h-full"><Spinner className="size-8"/></div>}
       {!loading &&
         <>
-        <div className="mb-8 flex justify-between">
+        <div className="m-8 flex justify-between">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -471,7 +471,7 @@ function ListPage() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <ItemGroup className="h-[calc(100vh-150px)] overflow-y-scroll">
+        <ItemGroup className="flex-1 overflow-y-auto p-5 pb-28">
           {generateActiveItems()}
           <Separator className="mt-5"/>
           <Collapsible
@@ -492,20 +492,20 @@ function ListPage() {
             </CollapsibleContent>
           </Collapsible>
         </ItemGroup>
-        <div className="absolute w-[calc(100vw-40px)] max-w-[632px] bottom-5 justify-between">
-          <form className="flex" onSubmit={(e) => handleItemCreation(e)}>
-            <Input
-              className=" w-5/6"
-              id="name-1" 
-              name="name" 
-              placeholder="Eggs"
-              required 
-              value={itemName}
-              onChange={(e) => setItemName(e.target.value)}
-              type="text"
-            />
-            <Button className=" w-1/6" variant={"outline"} type="submit">Add</Button>
-          </form>
+        <div className="fixed bottom-0 left-0 right-0 p-5 bg-background border-t">
+          <div className="max-w-[632px] mx-auto">
+            <form className="flex" onSubmit={(e) => handleItemCreation(e)}>
+              <Input
+                className="w-5/6"
+                placeholder="Eggs"
+                value={itemName}
+                onChange={(e) => setItemName(e.target.value)}
+              />
+              <Button className="w-1/6" variant="outline" type="submit">
+                Add
+              </Button>
+            </form>
+          </div>
         </div>
         
         </>
