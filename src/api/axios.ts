@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://shopping-list-production-0491.up.railway.app/api",
+  baseURL: "http://localhost:8080/api",
   withCredentials: true,
 });
 
